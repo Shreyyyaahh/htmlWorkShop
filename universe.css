@@ -1,0 +1,127 @@
+
+    :root{
+      --bg1:#030617; /* deep space */
+      --bg2:#0b102a; /* mid */
+      --neon:#7cf7ff; /* cyan */
+      --violet:#a78bfa; /* violet */
+      --magenta:#fb37a8; /* magenta */
+      --gold:#ffd166; /* star highlight */
+      --glow: drop-shadow(0 0 10px rgba(124,247,255,.5)) drop-shadow(0 0 30px rgba(124,247,255,.35));
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 800px at 75% 20%, #1a1442 0%, transparent 60%),
+                  radial-gradient(800px 600px at 20% 70%, #2a0a3d 0%, transparent 55%),
+                  radial-gradient(1000px 700px at 80% 80%, #0a2a3d 0%, transparent 65%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow:hidden;
+      font-family: 'Outfit', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+    /* Layer stack */
+    .layer{position:fixed; inset:0; pointer-events:none}
+
+    /* Twinkling sprite layer (CSS only, cheap) */
+    .twinkles{
+      background-image:
+        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.7) 50%, transparent 51%),
+        radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,.6) 50%, transparent 51%),
+        radial-gradient(1.5px 1.5px at 70% 40%, rgba(255,255,255,.6) 50%, transparent 51%),
+        radial-gradient(1px 1px at 85% 20%, rgba(255,255,255,.6) 50%, transparent 51%),
+        radial-gradient(1.5px 1.5px at 10% 80%, rgba(255,255,255,.6) 50%, transparent 51%);
+      background-repeat: repeat;
+      background-size: 600px 600px, 700px 700px, 800px 800px, 500px 500px, 650px 650px;
+      animation: twinkle 6s infinite linear;
+      mix-blend-mode: screen;
+      opacity:.5;
+    }
+    @keyframes twinkle{to{background-position:600px 600px, -700px 700px, 800px -800px, 500px -500px, -650px 650px}}
+
+    /* Nebula fog using layered gradients + blur */
+    .nebula{filter: blur(60px) saturate(140%) contrast(105%); opacity:.6}
+    .nebula::before, .nebula::after{
+      content:""; position:absolute; inset:-20vh; pointer-events:none;
+      background:
+        radial-gradient(1200px 900px at 15% 35%, rgba(251,55,168,.22), transparent 60%),
+        radial-gradient(900px 600px at 85% 65%, rgba(123,247,255,.18), transparent 60%),
+        radial-gradient(1000px 800px at 45% 80%, rgba(167,139,250,.18), transparent 60%),
+        radial-gradient(700px 500px at 70% 15%, rgba(255,209,102,.10), transparent 70%);
+      animation: drift 120s linear infinite;
+    }
+    .nebula::after{animation-duration:160s; mix-blend-mode:screen;}
+    @keyframes drift{to{transform:translate3d(10vw, -8vh, 0) rotate(5deg)}}
+
+    /* UI overlay */
+    .hud{position:fixed; inset:0; display:flex; flex-direction:column; justify-content:space-between; pointer-events:none}
+    header{
+      display:flex; align-items:center; gap:12px; padding:20px; pointer-events:auto
+    }
+    .badge{
+      font-family:'Orbitron', monospace; letter-spacing:.2em; text-transform:uppercase; font-weight:700;
+      color:var(--neon); border:1px solid rgba(124,247,255,.35); padding:10px 14px; border-radius:999px;
+      backdrop-filter: blur(8px); background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.0));
+      filter: var(--glow);
+    }
+    .title{color:white; margin:0; font-weight:800; line-height:1.1; text-shadow:0 0 30px rgba(124,247,255,.2)}
+    h1.title{font-size:clamp(28px, 5vw, 64px)}
+    p.subtitle{margin:0; color:#d7e8ff; opacity:.8; max-width:900px; font-size:clamp(14px, 1.6vw, 20px)}
+
+    /* CTA panel */
+    .controls{
+      position:fixed; left:50%; bottom:32px; transform:translateX(-50%);
+      display:flex; gap:10px; pointer-events:auto
+    }
+    .btn{
+      appearance:none; border:none; border-radius:16px; padding:14px 18px; font-weight:700;
+      color:#00131a; background:linear-gradient(180deg,#c9f7ff,#7cf7ff); cursor:pointer;
+      box-shadow:0 10px 30px rgba(124,247,255,.35), inset 0 0 0 1px rgba(255,255,255,.4);
+      transition: transform .15s ease, box-shadow .2s ease; font-family:'Orbitron', monospace; letter-spacing:.12em;
+    }
+    .btn:active{transform:translateY(1px) scale(.99)}
+    .btn.secondary{background:linear-gradient(180deg,#e7dcff,#c7b8ff)}
+    .btn.ghost{background:rgba(255,255,255,.06); color:#d7e8ff; border:1px solid rgba(255,255,255,.15); box-shadow:none}
+
+    /* Info card */
+    .card{
+      position:fixed; right:20px; bottom:20px; width:min(420px, calc(100vw - 40px));
+      padding:16px 18px; border-radius:18px; color:#daeeff;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid rgba(124,247,255,.22); backdrop-filter: blur(12px); pointer-events:auto
+    }
+    .meter{height:8px; background:rgba(255,255,255,.12); border-radius:999px; overflow:hidden}
+    .fill{height:100%; width:18%; background:linear-gradient(90deg, var(--violet), var(--neon)); box-shadow:0 0 20px rgba(124,247,255,.5) inset}
+
+    /* Parallax 3D tilt */
+    .tilt{position:fixed; inset:0; perspective:1200px;}
+    .parallax{position:absolute; inset:0; transform-style:preserve-3d}
+    .p{position:absolute; will-change:transform}
+
+    /* Planet */
+    .planet{width:540px; aspect-ratio:1/1; left:8vw; top:18vh; transform:translateZ(60px)}
+    .planet svg{filter:drop-shadow(0 30px 60px rgba(0,0,0,.6))}
+
+    /* Rings */
+    .rings{left:5vw; top:12vh; transform:translateZ(100px)}
+
+    /* Ship silhouette */
+    .ship{right:10vw; bottom:12vh; width:180px; transform:translateZ(140px)}
+
+    /* Shooting stars canvas sits above primary stars */
+    canvas{display:block}
+    #stars{position:fixed; inset:0; z-index:0}
+    #comets{position:fixed; inset:0; z-index:2}
+
+    /* Cursor crosshair */
+    .cursor{position:fixed; width:22px; height:22px; pointer-events:none; z-index:5; mix-blend-mode:exclusion}
+    .cursor::before{content:""; position:absolute; inset:0; border:2px solid #fff; border-radius:50%; opacity:.7}
+    .cursor::after{content:""; position:absolute; left:50%; top:50%; width:2px; height:2px; background:#fff; transform:translate(-50%,-50%)}
+
+    /* Constellation lines */
+    .constellation{position:fixed; inset:0; z-index:1; pointer-events:none}
+    .constellation svg{width:100%; height:100%}
+    .constellation line{stroke:rgba(255,255,255,.28); stroke-width:1.2; filter:drop-shadow(0 0 6px rgba(255,255,255,.5))}
+
+    /* Credits */
+    footer{position:fixed; left:20px; bottom:20px; color:#9fbad4; font-size:12px; letter-spacing:.08em; opacity:.8}
+    a{color:var(--neon); text-decoration:none}
